@@ -1,140 +1,64 @@
 "use client";
-import Image from "next/image";
-import * as React from "react";
-import { Link } from "@heroui/link";
-import { Divider } from "@heroui/divider";
-import { IoIosApps, IoIosArrowForward, IoMdLogOut } from "react-icons/io";
-import { IoIosArrowDown } from "react-icons/io";
-import { useEffect, useState } from "react";
+import { Tab, Tabs } from "@heroui/react";
 import { usePathname } from "next/navigation";
+import * as React from "react";
+import { FaWallet } from "react-icons/fa";
+import { BiReceipt } from "react-icons/bi";
+import { MdLeaderboard } from "react-icons/md";
 
-import { siteConfig } from "@/config/site";
+export const SubHeader = () => {
+  const pathname = usePathname();
 
-export const SidebarNavbar = (props: { fromHeader: boolean }) => {
-  const [route, setRoute] = useState<string>("/home");
-
-  const [open, setOpen] = useState<boolean>(false);
-
-  const pathName = usePathname();
-
-  const toggle = () => {
-    setOpen(!open);
-  };
-
-  useEffect(() => {
-    setRoute(pathName);
-    setOpen(false);
-  }, [pathName]);
+  const [selected] = React.useState(
+    pathname === "/home" ? "top-up" : pathname.replace("/", ""),
+  );
 
   return (
-    <div
-      className={`${props.fromHeader ? "flex h-full flex-col bg-primary" : "hidden w-96 lg:flex h-full flex-col bg-primary"}`}
-    >
-      <div className={`flex flex-col justify-center items-center py-6 gap-6`}>
-        <Image
-          alt={"logo"}
-          className={``}
-          height={80}
-          src={siteConfig.logo}
-          width={80}
-        />
-        <Divider />
-      </div>
-      <div
-        className={`px-3 gap-0.5 flex flex-col flex-grow max-h-[calc(100vh-300px)] overflow-y-auto`}
+    <div className="flex w-full flex-col items-center justify-center">
+      <Tabs
+        aria-label="Options"
+        classNames={{
+          tabList: "gap-6 w-full relative rounded-none p-0",
+          cursor: "w-full bg-sky-400",
+          tab: "max-w-fit px-3 h-12 transition-colors duration-200",
+          tabContent:
+            "group-data-[selected=true]:text-white hover:text-white transition-colors duration-200",
+        }}
+        color="primary"
+        selectedKey={selected}
+        variant="underlined"
       >
-        {siteConfig.navItems.map((item, index) => {
-          return item.href === route ? (
-            <div
-              key={`${index}-1`}
-              className={`px-2.5 py-2.5 cursor-pointer rounded-xl font-medium bg-primary-400`}
-            >
-              <Link
-                className={`flex flex-row gap-4 text-gray-100`}
-                href={item.href}
-              >
-                {item.icon}
-                <div className={``}>{item.label}</div>
-              </Link>
+        <Tab
+          key="top-up"
+          href={"/top-up"}
+          title={
+            <div className="flex items-center space-x-2">
+              <FaWallet />
+              <span>Top Up</span>
             </div>
-          ) : item.child.length > 0 ? (
-            <div key={`${index}-2`} className={`flex flex-col`}>
-              <Link
-                className={`flex flex-row justify-between items-center px-2.5 py-2.5 cursor-pointer rounded-xl hover:bg-primary-400`}
-                onPress={toggle}
-              >
-                <div
-                  className={`flex flex-row gap-4 text-gray-200 hover:text-gray-100`}
-                >
-                  <IoIosApps color={`#F3F4F6`} size={20} />
-                  <div>{item.label}</div>
-                </div>
-                {open ? (
-                  <IoIosArrowDown color={`#F3F4F6`} size={15} />
-                ) : (
-                  <IoIosArrowForward color={`#F3F4F6`} size={15} />
-                )}
-              </Link>
-              {open ? (
-                <div className={`flex flex-col gap-0.5 pt-0.5`}>
-                  {item.child.map((child, indexChild) => {
-                    return child.href === route ? (
-                      <div
-                        key={`${indexChild}-11`}
-                        className={`px-2.5 py-1.5 cursor-pointer rounded-xl font-medium bg-primary-400`}
-                      >
-                        <Link
-                          className={`flex flex-row gap-4 text-gray-100`}
-                          href={child.href}
-                        >
-                          <div className={`pl-11`}>{child.label}</div>
-                        </Link>
-                      </div>
-                    ) : (
-                      <div
-                        key={`${indexChild}-12`}
-                        className={`px-2.5 py-1.5 cursor-pointer rounded-xl hover:bg-primary-400`}
-                      >
-                        <Link
-                          className={`flex flex-row gap-4 font-medium text-gray-200 hover:text-gray-100`}
-                          href={child.href}
-                        >
-                          <div className={`pl-11`}>{child.label}</div>
-                        </Link>
-                      </div>
-                    );
-                  })}
-                </div>
-              ) : null}
+          }
+        />
+        <Tab
+          key="check-transaction"
+          href={"/check-transaction"}
+          title={
+            <div className="flex items-center space-x-2">
+              <BiReceipt />
+              <span>Check Transaction</span>
             </div>
-          ) : (
-            <div
-              key={`${index}-3`}
-              className={`px-2.5 py-2.5 cursor-pointer rounded-xl hover:bg-primary-400`}
-            >
-              <Link
-                className={`flex flex-row gap-4 font-medium text-gray-200 hover:text-gray-100`}
-                href={item.href}
-              >
-                {item.icon}
-                <div className={``}>{item.label}</div>
-              </Link>
+          }
+        />
+        <Tab
+          key="leaderboard"
+          href={"/leaderboard"}
+          title={
+            <div className="flex items-center space-x-2">
+              <MdLeaderboard />
+              <span>Leaderboard</span>
             </div>
-          );
-        })}
-      </div>
-      <div className="mt-auto">
-        <Divider />
-        <div className={`px-3 py-5 cursor-pointer hover:bg-primary-600`}>
-          <Link
-            className={`flex flex-row gap-2 justify-center`}
-            href={`/login`}
-          >
-            <IoMdLogOut color={`#F3F4F6`} size={25} />
-            <div className={`text-gray-100`}>Logout</div>
-          </Link>
-        </div>
-      </div>
+          }
+        />
+      </Tabs>
     </div>
   );
 };

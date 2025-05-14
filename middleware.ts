@@ -7,7 +7,7 @@ export function mainMiddleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/", "/home", "/customer", "/customer/:path*", "/profile"],
+  matcher: [],
 };
 
 export default withAuth(mainMiddleware, config.matcher);

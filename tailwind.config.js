@@ -105,13 +105,14 @@ module.exports = {
         white: "#FFFFFF",
         header: "#E5E7EB",
         footer: "#E5E7EB",
-        background: "#F3F4F6",
+        background: "#242424",
       },
       fontFamily: {
         sans: ["var(--font-sans)"],
         mono: ["var(--font-mono)"],
       },
     },
+
   },
   darkMode: "class",
   plugins: [heroui()],
